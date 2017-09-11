@@ -1,0 +1,9 @@
+1) ligne 25, le programme attend 0x1a7 en argument (423)
+
+2) On quitte gdb et on execute ./level0 423
+
+Un shell s'ouvre avec les droits de level1
+
+On cat /home/user/level1/.pass
+
+On a le token.
