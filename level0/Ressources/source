@@ -1,0 +1,16 @@
+int	main(int argc, char *argv)
+{
+	int nb = atoi(argv[1]);
+	if (nb == 0x1a7)
+	{
+		getegid(...);
+		geteuid(...);
+
+		setresgid(...);
+		setresuid(...)
+		execve("/bin/bash", NULL, NULL); // execute un shell avec les droit de level1
+	}
+	else
+		fwrite("No !\n", 1, 5, stdout);
+	return (0);
+}
