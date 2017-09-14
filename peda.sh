@@ -12,3 +12,4 @@ chmod -R +rx .
 cd $HOME
 echo "\033[31mNE PAS OUBLIER l'ALIAS GDB :\033[0m"
 echo 'alias gdb="/usr/bin/gdb -x /tmp/peda/peda.py -q "'
+
