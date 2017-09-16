@@ -1,0 +1,20 @@
+int	m;
+
+void	v()
+{
+	char	buff[0x218];
+
+	gets(&buff);
+	printf(buff);
+	if (m = 0x40)
+	{
+		fwrite("Wait what?\n", 1, 11, stdout);
+		system("/bin/sh");
+	}
+	return ;
+}
+
+int	main()
+{
+	v();
+}
