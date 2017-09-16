@@ -1,3 +1,17 @@
+void	p()
+{
+	char	buff[72];
+	char	*ret;
+	ret = gets(&buf);
+	if (ret & 0xb00000)
+	{
+		printf("(%p\n)", ret);
+		exit(1);
+	}
+	puts(buff);
+	strdup(buff);
+}
+
 int	main()
 {
 	p();
