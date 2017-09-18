@@ -1,0 +1,21 @@
+int	m;
+
+void	o()
+{
+	system("/bin/sh");
+	_exit(0x1);
+}
+
+void	n()
+{
+	char	buff[512];
+
+	fgets(&buff, 512, stdin);
+	printf(buff);
+	exit(0x1);
+}
+
+int	main()
+{
+	n();
+}
