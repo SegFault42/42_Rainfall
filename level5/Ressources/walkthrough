@@ -1,0 +1,7 @@
+objdump -R ./level5 | grep exit
+
+addr of exit =	0x08049838
+
+addr of o =		0x080484a4
+
+
