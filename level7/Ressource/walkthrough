@@ -1,0 +1,13 @@
+http://www.kroosec.com/2012/12/protostar-heap1.html
+
+first strcpy :	argv[0]: 0x804a018 --> 0x0
+				argv[1]: 0xbffff44a ("Aa0Aa1Aa2Aa3"...)
+
+second strcpy :	argv[0]: 0x37614136 ('6Aa7')
+				argv[1]: 0xbffff63f ("Aa0Aa1Aa2Aa3A"...)
+
+
+puts addr	= 0x08049928
+
+m addr		= 0x080484f4
+
