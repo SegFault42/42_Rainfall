@@ -1,0 +1,20 @@
+void	m(char *buff)
+{
+	puts(buff);
+}
+
+void	n()
+{
+	system("/bin/cat /home/user/level7/.pass");
+}
+
+#include <stdlib.h>
+
+int	main()
+{
+	char *str = malloc(0x40);
+	char *str2 = malloc(0x4);
+
+	strcpy(str, argv[1]);
+	m(str);
+}

