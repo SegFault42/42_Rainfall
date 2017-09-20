@@ -1,6 +1,5 @@
 http://www.kroosec.com/2012/12/protostar-heap1.html
 
-
 puts addr	= 0x08049928
 
 m addr		= 0x080484f4
