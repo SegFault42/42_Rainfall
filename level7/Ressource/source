@@ -1,0 +1,20 @@
+void	m(char *str)
+{
+	printf("%s\n - %d", str, time(NULL));
+}
+
+int main()
+{
+	char *str1 = malloc(8);
+	char *str2 = malloc(8);
+	char *str3 = malloc(8);
+	char *str4 = malloc(8);
+
+	str1 = strcpy(str1, argv[1]);
+	str2 = strcpy(str2, argv[2]);
+	
+	FILE *fd = fopen("/home/user/level8/.pass", "r");
+
+	fgets(....);
+	puts("~~");
+}

