@@ -1,0 +1,21 @@
+void	p()
+{
+	p(" - ");
+	read(0, &buff, 0x1000);
+	char ret = strchr(buff, "\n");
+	strncpy(dest, buff, 0x14);
+}
+
+void	pp()
+{
+	p();
+	p();
+	strcpy();
+	strcat();
+}
+
+int	main()
+{
+	pp();
+	puts();
+}

