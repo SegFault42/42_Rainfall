@@ -1,0 +1,15 @@
+int	main()
+{	
+	char buff[0x40];
+	buff[0x3c] = atoi(argv[1]);
+	if (buf[0x3c] < 10)
+	{
+		memcpy(buff, argv[2], buff[0x3c] * sizeof(int));
+		if (buff[0x3c] == 0x574f4c46)
+		{
+			execl("/bin/sh");
+		}
+	}	
+	return (1);
+	
+}
