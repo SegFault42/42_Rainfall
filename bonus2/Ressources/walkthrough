@@ -1,0 +1,8 @@
+buffer 1 = 41 octets
+buffer 2 = 33 octets
+26 octet erase ebp
+
+
+getenv lang
+
+export LANG=fi

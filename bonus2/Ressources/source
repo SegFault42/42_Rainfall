@@ -1,0 +1,8 @@
+int main()
+{
+	if (argc != 3)
+		return (0);
+	strncpy(0xbffff530, argv[1], 0x28)
+	strncpy(0xbffff558, argv[2], 0x20)
+	getenv("LANG");
+}
