@@ -1,0 +1,9 @@
+int	main()
+{
+	char buf[20];
+	int num = atoi(argv[1]);
+
+	if (num > 0x9)
+		return (0);
+	memcpy(buf, argv[2], i * sizeof(int));
+}
