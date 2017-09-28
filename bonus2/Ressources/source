@@ -1,8 +1,19 @@
+void	greetuser(char *str1, char *str2)
+{
+	char *new = strcat(str1, str2);
+	puts(new);
+}
+
 int main()
 {
 	if (argc != 3)
 		return (0);
 	strncpy(0xbffff530, argv[1], 0x28)
 	strncpy(0xbffff558, argv[2], 0x20)
-	getenv("LANG");
+	char *env = getenv("LANG");
+	if (strncmp(env, "fi", 2))
+	{
+		greetuser();
+	}
+	return (0);
 }
